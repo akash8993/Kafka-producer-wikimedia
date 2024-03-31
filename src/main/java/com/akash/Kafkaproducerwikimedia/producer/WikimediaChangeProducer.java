@@ -7,6 +7,7 @@ import com.launchdarkly.eventsource.background.BackgroundEventSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,15 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class WikimediaChangeProducer {
 
+    @Value("${kafka.topic.name}")
+    private String topicName;
     private final Logger logger= LoggerFactory.getLogger(WikimediaChangeProducer.class);
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendMessage() throws InterruptedException {
-        String topic="wikimedia_recentchange";
+        String topic=topicName;
 
         //To read real time data we have to use event source
 
